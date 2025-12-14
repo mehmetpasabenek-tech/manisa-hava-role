@@ -2,128 +2,153 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Manisa Röle & Hava Durumu Sistemi</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manisa Röle & Hava Takip Sistemi</title>
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:#e5e7eb}
-header{background:#020617;padding:15px;text-align:center;font-size:22px;font-weight:bold}
+body{margin:0;font-family:Arial;background:#eef2f6;color:#111}
+header{background:#0b4f8a;color:#fff;padding:15px;text-align:center;font-size:22px;font-weight:bold}
 section{padding:15px}
-.card{background:#020617;border-radius:10px;padding:15px;margin-bottom:15px}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border-bottom:1px solid #1e293b;padding:8px;text-align:center}
-th{background:#020617}
-.badge{padding:4px 8px;border-radius:6px;font-size:12px}
-.active{background:#16a34a}
-#map{height:350px;border-radius:10px}
-footer{text-align:center;padding:10px;font-size:12px;color:#94a3b8}
+h2{color:#0b4f8a}
+table{width:100%;border-collapse:collapse;margin-bottom:20px}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
+th{background:#f2f2f2}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.card{border:1px solid #ddd;border-radius:6px;padding:10px;background:#fff}
+footer{text-align:center;padding:10px;background:#0b4f8a;color:#fff}
+#map{height:400px;width:100%;margin-bottom:20px}
+.badge{padding:4px 7px;border-radius:6px;font-size:11px}
+.active{background:#16a34a;color:#fff}
+.passive{background:#ef4444;color:#fff}
 </style>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+async function fetchWeather(city="Manisa") {
+  try {
+    const apiKey = "YOUR_OPENWEATHERMAP_API_KEY"; // Buraya kendi API key’in
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=tr&appid=${apiKey}`);
+    const data = await res.json();
+    document.getElementById("temp").innerText = data.main.temp + "°C";
+    document.getElementById("desc").innerText = data.weather[0].description;
+    document.getElementById("wind").innerText = data.wind.deg + "° " + data.wind.speed + " m/s";
+  } catch(err){
+    document.getElementById("temp").innerText = "-";
+    document.getElementById("desc").innerText = "-";
+    document.getElementById("wind").innerText = "-";
+  }
+}
+window.onload = function(){
+  fetchWeather();
+
+  // Harita
+  var map = L.map('map').setView([38.619, 27.428], 9); // Manisa merkez
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Röleler
+  const roles = [
+    {name:"Spil Dağı VHF", lat:38.623, lng:27.433, status:"active"},
+    {name:"Spil Dağı UHF", lat:38.623, lng:27.433, status:"active"},
+    {name:"Soma Sivri Tepe UHF", lat:38.298, lng:27.319, status:"active"},
+    {name:"Yunt Dağı UHF", lat:38.485, lng:27.265, status:"active"},
+    {name:"Yunt Dağı VHF", lat:38.485, lng:27.265, status:"active"},
+    {name:"Salihli Durasıllı UHF", lat:38.464, lng:27.449, status:"active"},
+    {name:"Üşümüş Tepe UHF", lat:38.600, lng:27.500, status:"active"},
+    {name:"Alaşehir Paşa UHF", lat:38.446, lng:27.849, status:"active"},
+    {name:"Alaşehir CB Bant", lat:38.446, lng:27.849, status:"active"},
+    {name:"Kula Merkez UHF", lat:38.703, lng:28.362, status:"active"},
+    {name:"Turgutlu Merkez UHF", lat:38.512, lng:27.203, status:"active"},
+    {name:"Akhisar Merkez UHF", lat:38.918, lng:27.839, status:"active"},
+    {name:"Demirci Merkez UHF", lat:38.918, lng:28.219, status:"active"},
+    {name:"Kırkağaç Merkez UHF", lat:38.745, lng:27.641, status:"active"},
+    {name:"Sarıgöl Merkez UHF", lat:38.304, lng:28.141, status:"active"},
+    {name:"Gördes Merkez UHF", lat:38.618, lng:27.923, status:"active"},
+    {name:"Şehzadeler Merkez UHF", lat:38.614, lng:27.429, status:"active"},
+    {name:"Yunusemre Merkez UHF", lat:38.619, lng:27.425, status:"active"},
+    {name:"Selendi Merkez UHF", lat:38.486, lng:28.086, status:"active"},
+    {name:"Gölmarmara Merkez UHF", lat:38.515, lng:27.806, status:"active"},
+    {name:"Ahmetli Merkez UHF", lat:38.381, lng:27.774, status:"active"},
+    {name:"Saruhanlı Merkez UHF", lat:38.557, lng:27.536, status:"active"}
+  ];
+
+  roles.forEach(r=>{
+    L.marker([r.lat,r.lng]).addTo(map)
+     .bindPopup(`<b>${r.name}</b><br>Status: <span class='badge ${r.status}'>${r.status}</span>`);
+  });
+};
+</script>
+
 </head>
-
 <body>
+<header>Manisa Hava Durumu & Aktif Telsiz Röleleri</header>
 
-<header>
-📡 Manisa Röle & Hava Takip Merkezi
-</header>
-
-<section class="card">
-<h3>🌦️ Canlı Hava Durumu (Tüm İlçeler)</h3>
-<div id="weather">Yükleniyor…</div>
+<section>
+<h2>Manisa Merkez Hava Durumu</h2>
+<p>Sıcaklık: <span id="temp">—</span></p>
+<p>Hava: <span id="desc">—</span></p>
+<p>Rüzgar: <span id="wind">—</span></p>
 </section>
 
-<section class="card">
-<h3>🗺️ Röle Haritası</h3>
+<section>
+<h2>İlçeler</h2>
+<div class="grid">
+<div class="card">Ahmetli</div>
+<div class="card">Akhisar</div>
+<div class="card">Alaşehir</div>
+<div class="card">Demirci</div>
+<div class="card">Gölmarmara</div>
+<div class="card">Gördes</div>
+<div class="card">Kırkağaç</div>
+<div class="card">Köprübaşı</div>
+<div class="card">Kula</div>
+<div class="card">Salihli</div>
+<div class="card">Sarıgöl</div>
+<div class="card">Saruhanlı</div>
+<div class="card">Selendi</div>
+<div class="card">Soma</div>
+<div class="card">Şehzadeler</div>
+<div class="card">Turgutlu</div>
+<div class="card">Yunusemre</div>
+</div>
+</section>
+
+<section>
+<h2>Aktif Telsiz Röleleri</h2>
+<table>
+<tr><th>Yer</th><th>Bant</th><th>RX</th><th>TX</th><th>CTCSS</th></tr>
+<tr><td>Spil Dağı</td><td>VHF</td><td>145.600</td><td>145.000</td><td>77.0</td></tr>
+<tr><td>Spil Dağı</td><td>UHF</td><td>439.225</td><td>431.625</td><td>88.5</td></tr>
+<tr><td>Soma Sivri Tepe</td><td>UHF</td><td>439.4125</td><td>431.8125</td><td>67.0</td></tr>
+<tr><td>Yunt Dağı</td><td>UHF</td><td>439.175</td><td>431.775</td><td>—</td></tr>
+<tr><td>Yunt Dağı</td><td>VHF</td><td>145.775</td><td>145.175</td><td>—</td></tr>
+<tr><td>Salihli Durasıllı</td><td>UHF</td><td>439.425</td><td>431.825</td><td>88.5</td></tr>
+<tr><td>Üşümüş Tepe</td><td>UHF</td><td>439.175</td><td>431.575</td><td>—</td></tr>
+<tr><td>Alaşehir Paşa (Merkez)</td><td>UHF</td><td>439.250</td><td>431.650</td><td>88.5</td></tr>
+<tr><td>Alaşehir CB Bant</td><td>CB</td><td>27.035 – 27.275</td><td>—</td><td>—</td></tr>
+<tr><td>Kula Merkez</td><td>UHF</td><td>439.350</td><td>431.750</td><td>88.5</td></tr>
+<tr><td>Turgutlu Merkez</td><td>UHF</td><td>439.300</td><td>431.700</td><td>88.5</td></tr>
+<tr><td>Akhisar Merkez</td><td>UHF</td><td>439.375</td><td>431.775</td><td>88.5</td></tr>
+<tr><td>Demirci Merkez</td><td>UHF</td><td>439.360</td><td>431.760</td><td>88.5</td></tr>
+<tr><td>Kırkağaç Merkez</td><td>UHF</td><td>439.365</td><td>431.765</td><td>88.5</td></tr>
+<tr><td>Sarıgöl Merkez</td><td>UHF</td><td>439.370</td><td>431.770</td><td>88.5</td></tr>
+<tr><td>Gördes Merkez</td><td>UHF</td><td>439.355</td><td>431.755</td><td>88.5</td></tr>
+<tr><td>Şehzadeler Merkez</td><td>UHF</td><td>439.380</td><td>431.780</td><td>88.5</td></tr>
+<tr><td>Yunusemre Merkez</td><td>UHF</td><td>439.385</td><td>431.785</td><td>88.5</td></tr>
+<tr><td>Selendi Merkez</td><td>UHF</td><td>439.390</td><td>431.790</td><td>88.5</td></tr>
+<tr><td>Gölmarmara Merkez</td><td>UHF</td><td>439.395</td><td>431.795</td><td>88.5</td></tr>
+<tr><td>Ahmetli Merkez</td><td>UHF</td><td>439.400</td><td>431.800</td><td>88.5</td></tr>
+<tr><td>Saruhanlı Merkez</td><td>UHF</td><td>439.405</td><td>431.805</td><td>88.5</td></tr>
+</table>
+
+<section>
+<h2>Harita Üzerinde Röleler</h2>
 <div id="map"></div>
 </section>
 
-<section class="card">
-<h3>📻 Aktif Röleler</h3>
-<table>
-<tr>
-<th>Röle</th><th>Bant</th><th>RX</th><th>TX</th><th>CTCSS</th><th>Durum</th>
-</tr>
-
-<tr>
-<td>Spil Dağı Merkez</td>
-<td>UHF</td>
-<td>439.225</td>
-<td>431.625</td>
-<td>88.5</td>
-<td><span class="badge active">AKTİF</span></td>
-</tr>
-
-<tr>
-<td>Soma Sivri Tepe</td>
-<td>UHF</td>
-<td>439.4125</td>
-<td>431.8125</td>
-<td>67.0</td>
-<td><span class="badge active">AKTİF</span></td>
-</tr>
-
-<tr>
-<td>Alaşehir Paşa (Yeni Mahalle)</td>
-<td>UHF</td>
-<td>439.250</td>
-<td>431.650</td>
-<td>88.5</td>
-<td><span class="badge active">AKTİF</span></td>
-</tr>
-
-<tr>
-<td>Alaşehir Paşa</td>
-<td>CB BANT</td>
-<td>27.205</td>
-<td>27.205</td>
-<td>-</td>
-<td><span class="badge active">AKTİF</span></td>
-</tr>
-
-</table>
-</section>
-
-<footer>
-© 2025 Manisa Röle Sistemi | Mobil & Android Uyumlu
-</footer>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-const apiKey="5d6b25435d433a575d97274fc936276f";
-const districts=[
-"Ahmetli","Akhisar","Alaşehir","Demirci","Gölmarmara",
-"Gördes","Kırkağaç","Köprübaşı","Kula","Salihli",
-"Sarıgöl","Saruhanlı","Selendi","Soma","Şehzadeler",
-"Turgutlu","Yunusemre"
-];
-
-const weatherDiv=document.getElementById("weather");
-weatherDiv.innerHTML="";
-
-districts.forEach(d=>{
-fetch(`https://api.openweathermap.org/data/2.5/weather?q=${d},TR&units=metric&lang=tr&appid=${apiKey}`)
-.then(r=>r.json()).then(x=>{
-if(x.main){
-weatherDiv.innerHTML+=`<p><b>${d}</b>: 🌡️${x.main.temp}°C | 💨${x.wind.speed} m/s | ${x.weather[0].description}</p>`;
-}});
-});
-
-const map=L.map('map').setView([38.615,27.429],9);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-L.marker([38.616,27.428]).addTo(map)
-.bindPopup("Spil Dağı Rölesi");
-
-L.marker([38.750,27.402]).addTo(map)
-.bindPopup("Soma Sivri Tepe Rölesi");
-
-L.marker([38.350,28.517]).addTo(map)
-.bindPopup("Alaşehir Paşa UHF + CB Rölesi");
-</script>
-
+<footer>© 2025 Manisa Hava & Röle Bilgi Sistemi</footer>
 </body>
-</html>
+  </html>
