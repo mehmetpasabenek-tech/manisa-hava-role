@@ -5,21 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manisa Hava Durumu & Telsiz Röleleri</title>
 
-<!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
 <style>
-body{font-family:Arial;margin:0;background:#eef2f6}
-header{background:#0b4f8a;color:#fff;padding:15px;text-align:center}
-section{background:#fff;margin:15px;padding:15px;border-radius:8px}
-h2{color:#0b4f8a}
-table{width:100%;border-collapse:collapse}
-th,td{border:1px solid #ccc;padding:8px;text-align:center}
-th{background:#f2f2f2}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
-.card{border:1px solid #ddd;border-radius:6px;padding:10px;background:#fafafa}
-footer{text-align:center;padding:12px;background:#0b4f8a;color:#fff}
-#map{height:350px;border-radius:8px}
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#eef2f6;
+}
+header{
+    background:#0b4f8a;
+    color:#fff;
+    padding:15px;
+    text-align:center;
+}
+section{
+    background:#fff;
+    margin:15px;
+    padding:15px;
+    border-radius:8px;
+}
+h2{
+    color:#0b4f8a;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+th,td{
+    border:1px solid #ccc;
+    padding:8px;
+    text-align:center;
+}
+th{
+    background:#f2f2f2;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;
+}
+.card{
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:10px;
+    background:#fafafa;
+}
+footer{
+    text-align:center;
+    padding:10px;
+    background:#0b4f8a;
+    color:#fff;
+    font-size:14px;
+}
+.status-active{color:green;font-weight:bold;}
+.status-mid{color:#c77700;font-weight:bold;}
+.status-weak{color:red;font-weight:bold;}
 </style>
 </head>
 
@@ -27,21 +67,22 @@ footer{text-align:center;padding:12px;background:#0b4f8a;color:#fff}
 
 <header>
 <h1>Manisa Hava Durumu & Aktif Telsiz Röleleri</h1>
+<p>Güncel Röle Bilgi Sistemi</p>
 </header>
 
 <section>
-<h2>Manisa Merkez</h2>
-<p><b>Hava:</b> Açık / Parçalı Bulutlu</p>
-<p><b>Sıcaklık:</b> 12 – 15 °C</p>
-<p><b>Rüzgar:</b> Kuzey – Kuzeydoğu</p>
-<p><b>Güneş:</b> 08:20 / 17:50</p>
+<h2>🌤 Manisa Merkez Hava Durumu</h2>
+<p>Hava: Açık / Parçalı Bulutlu</p>
+<p>Sıcaklık: 12–15 °C</p>
+<p>Rüzgar: Kuzey – Kuzeydoğu</p>
+<p>Güneş: 08:20 / 17:50</p>
 </section>
 
 <section>
-<h2>Manisa İlçeleri</h2>
+<h2>📍 İlçeler</h2>
 <div class="grid">
 <div class="card">Alaşehir – Güneşli</div>
-<div class="card">Akhisar – Parçalı</div>
+<div class="card">Akhisar – Parçalı Bulutlu</div>
 <div class="card">Soma – Açık</div>
 <div class="card">Kula – Az Bulutlu</div>
 <div class="card">Salihli – Güneşli</div>
@@ -50,14 +91,16 @@ footer{text-align:center;padding:12px;background:#0b4f8a;color:#fff}
 </section>
 
 <section>
-<h2>Aktif Telsiz Röleleri</h2>
+<h2>📡 Aktif Telsiz Röleleri</h2>
+
 <table>
 <tr>
 <th>Yer / Röle</th>
 <th>Bant</th>
-<th>RX (MHz)</th>
-<th>TX (MHz)</th>
+<th>RX (Çıkış)</th>
+<th>TX (Giriş)</th>
 <th>CTCSS</th>
+<th>Durum</th>
 </tr>
 
 <tr>
@@ -66,6 +109,7 @@ footer{text-align:center;padding:12px;background:#0b4f8a;color:#fff}
 <td>145.600</td>
 <td>145.000</td>
 <td>77.0</td>
+<td class="status-active">Aktif</td>
 </tr>
 
 <tr>
@@ -74,6 +118,7 @@ footer{text-align:center;padding:12px;background:#0b4f8a;color:#fff}
 <td>439.225</td>
 <td>431.625</td>
 <td>88.5</td>
+<td class="status-active">Aktif</td>
 </tr>
 
 <tr>
@@ -82,44 +127,52 @@ footer{text-align:center;padding:12px;background:#0b4f8a;color:#fff}
 <td>439.4125</td>
 <td>431.8125</td>
 <td>67.0</td>
+<td class="status-active">Aktif</td>
 </tr>
 
 <tr>
-<td>Alaşehir – Paşa Rölesi (Yeni Mahalle)</td>
+<td>Alaşehir Paşa Rölesi (Yeni Mahalle)</td>
 <td>UHF</td>
 <td>439.250</td>
 <td>431.650</td>
 <td>88.5</td>
+<td class="status-active">Aktif</td>
 </tr>
+
+<tr>
+<td>Salihli – Durasıllı</td>
+<td>UHF</td>
+<td>439.300</td>
+<td>431.700</td>
+<td>88.5</td>
+<td class="status-mid">Zaman Zaman Aktif</td>
+</tr>
+
+<tr>
+<td>Akhisar – Merkez</td>
+<td>UHF</td>
+<td>439.375</td>
+<td>431.775</td>
+<td>88.5</td>
+<td class="status-mid">Duruma Göre</td>
+</tr>
+
+<tr>
+<td>Kula – Yüksek Tepe</td>
+<td>UHF</td>
+<td>439.400</td>
+<td>431.800</td>
+<td>88.5</td>
+<td class="status-weak">Zayıf / Deneysel</td>
+</tr>
+
 </table>
 </section>
 
-<section>
-<h2>Röle Haritası</h2>
-<div id="map"></div>
-</section>
-
 <footer>
-© 2025 Manisa Hava & Telsiz Röle Bilgi Sistemi
+© 2025 Manisa Hava & Röle Bilgi Sistemi<br>
+Son Güncelleme: 2025
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-var map = L.map('map').setView([38.6191, 27.4289], 9);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap'
-}).addTo(map);
-
-L.marker([38.615,27.431]).addTo(map)
-  .bindPopup("<b>Spil Dağı Röleleri</b><br>VHF & UHF");
-
-L.marker([39.185,27.609]).addTo(map)
-  .bindPopup("<b>Soma – Sivri Tepe</b><br>UHF");
-
-L.marker([38.349,28.517]).addTo(map)
-  .bindPopup("<b>Alaşehir – Paşa Rölesi</b><br>UHF 439.250 / 431.650");
-</script>
-
 </body>
-  </html>
+</html>
