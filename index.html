@@ -2,110 +2,67 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<title>Manisa Röle & Hava Durumu Sistemi</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manisa Hava Durumu & Telsiz Röleleri</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-body{
-  font-family:Arial, sans-serif;
-  margin:0;
-  background:#eef2f6;
-}
-header{
-  background:#0b4f8a;
-  color:#fff;
-  padding:15px;
-  text-align:center;
-}
-section{
-  background:#fff;
-  margin:15px;
-  padding:15px;
-  border-radius:8px;
-}
-h2{color:#0b4f8a}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:10px;
-}
-.card{
-  border:1px solid #ddd;
-  border-radius:6px;
-  padding:10px;
-  background:#fafafa;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-}
-th,td{
-  border:1px solid #ccc;
-  padding:8px;
-  text-align:center;
-}
-th{background:#f2f2f2}
-.status-active{color:green;font-weight:bold;}
-.status-mid{color:#c77700;font-weight:bold;}
-.status-weak{color:red;font-weight:bold;}
-footer{
-  text-align:center;
-  padding:10px;
-  background:#0b4f8a;
-  color:#fff;
-}
+body{margin:0;font-family:Arial;background:#0f172a;color:#e5e7eb}
+header{background:#020617;padding:15px;text-align:center;font-size:22px;font-weight:bold}
+section{padding:15px}
+.card{background:#020617;border-radius:10px;padding:15px;margin-bottom:15px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid #1e293b;padding:8px;text-align:center}
+th{background:#020617}
+.badge{padding:4px 8px;border-radius:6px;font-size:12px}
+.active{background:#16a34a}
+#map{height:350px;border-radius:10px}
+footer{text-align:center;padding:10px;font-size:12px;color:#94a3b8}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Manisa Hava Durumu & Aktif Telsiz Röleleri</h1>
-<p>Canlı İlçe Bazlı Bilgi Sistemi</p>
+📡 Manisa Röle & Hava Takip Merkezi
 </header>
 
-<section>
-<h2>🌦 Manisa İlçeleri – Canlı Hava Durumu</h2>
-<div id="ilceler" class="grid"></div>
+<section class="card">
+<h3>🌦️ Canlı Hava Durumu (Tüm İlçeler)</h3>
+<div id="weather">Yükleniyor…</div>
 </section>
 
-<section>
-<h2>📡 Aktif Telsiz Röleleri</h2>
+<section class="card">
+<h3>🗺️ Röle Haritası</h3>
+<div id="map"></div>
+</section>
+
+<section class="card">
+<h3>📻 Aktif Röleler</h3>
 <table>
 <tr>
-<th>Yer / Röle</th>
-<th>Bant</th>
-<th>RX</th>
-<th>TX</th>
-<th>CTCSS</th>
-<th>Durum</th>
+<th>Röle</th><th>Bant</th><th>RX</th><th>TX</th><th>CTCSS</th><th>Durum</th>
 </tr>
 
 <tr>
-<td>Spil Dağı</td>
-<td>VHF</td>
-<td>145.600</td>
-<td>145.000</td>
-<td>77.0</td>
-<td class="status-active">Aktif</td>
-</tr>
-
-<tr>
-<td>Spil Dağı</td>
+<td>Spil Dağı Merkez</td>
 <td>UHF</td>
 <td>439.225</td>
 <td>431.625</td>
 <td>88.5</td>
-<td class="status-active">Aktif</td>
+<td><span class="badge active">AKTİF</span></td>
 </tr>
 
 <tr>
-<td>Soma – Sivri Tepe</td>
+<td>Soma Sivri Tepe</td>
 <td>UHF</td>
 <td>439.4125</td>
 <td>431.8125</td>
 <td>67.0</td>
-<td class="status-active">Aktif</td>
+<td><span class="badge active">AKTİF</span></td>
 </tr>
 
 <tr>
@@ -114,70 +71,58 @@ footer{
 <td>439.250</td>
 <td>431.650</td>
 <td>88.5</td>
-<td class="status-active">Aktif</td>
+<td><span class="badge active">AKTİF</span></td>
 </tr>
 
 <tr>
-<td>Salihli – Durasıllı</td>
-<td>UHF</td>
-<td>439.300</td>
-<td>431.700</td>
-<td>88.5</td>
-<td class="status-mid">Zaman Zaman</td>
+<td>Alaşehir Paşa</td>
+<td>CB BANT</td>
+<td>27.205</td>
+<td>27.205</td>
+<td>-</td>
+<td><span class="badge active">AKTİF</span></td>
 </tr>
 
-<tr>
-<td>Akhisar</td>
-<td>UHF</td>
-<td>439.375</td>
-<td>431.775</td>
-<td>88.5</td>
-<td class="status-mid">Duruma Göre</td>
-</tr>
-
-<tr>
-<td>Kula</td>
-<td>UHF</td>
-<td>439.400</td>
-<td>431.800</td>
-<td>88.5</td>
-<td class="status-weak">Zayıf</td>
-</tr>
 </table>
 </section>
 
 <footer>
-© 2025 Manisa Hava & Röle Bilgi Sistemi
+© 2025 Manisa Röle Sistemi | Mobil & Android Uyumlu
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
-const apiKey = "5d6b25435d433a575d97274fc936276f";
-const ilceler = [
-  "Ahmetli","Akhisar","Alaşehir","Demirci","Gölmarmara","Gördes",
-  "Kırkağaç","Köprübaşı","Kula","Salihli","Sarıgöl","Saruhanlı",
-  "Selendi","Soma","Şehzadeler","Turgutlu","Yunusemre"
+const apiKey="5d6b25435d433a575d97274fc936276f";
+const districts=[
+"Ahmetli","Akhisar","Alaşehir","Demirci","Gölmarmara",
+"Gördes","Kırkağaç","Köprübaşı","Kula","Salihli",
+"Sarıgöl","Saruhanlı","Selendi","Soma","Şehzadeler",
+"Turgutlu","Yunusemre"
 ];
 
-const container = document.getElementById("ilceler");
+const weatherDiv=document.getElementById("weather");
+weatherDiv.innerHTML="";
 
-ilceler.forEach(ilce => {
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ilce},TR&units=metric&lang=tr&appid=${apiKey}`)
-    .then(res => res.json())
-    .then(data => {
-      if (!data.weather) return;
-
-      const kart = document.createElement("div");
-      kart.className = "card";
-      kart.innerHTML = `
-        <b>${ilce}</b><br>
-        ${data.weather[0].description}<br>
-        🌡 ${data.main.temp} °C<br>
-        💨 ${data.wind.speed} m/sn
-      `;
-      container.appendChild(kart);
-    })
-    .catch(()=>{});
+districts.forEach(d=>{
+fetch(`https://api.openweathermap.org/data/2.5/weather?q=${d},TR&units=metric&lang=tr&appid=${apiKey}`)
+.then(r=>r.json()).then(x=>{
+if(x.main){
+weatherDiv.innerHTML+=`<p><b>${d}</b>: 🌡️${x.main.temp}°C | 💨${x.wind.speed} m/s | ${x.weather[0].description}</p>`;
+}});
 });
+
+const map=L.map('map').setView([38.615,27.429],9);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+L.marker([38.616,27.428]).addTo(map)
+.bindPopup("Spil Dağı Rölesi");
+
+L.marker([38.750,27.402]).addTo(map)
+.bindPopup("Soma Sivri Tepe Rölesi");
+
+L.marker([38.350,28.517]).addTo(map)
+.bindPopup("Alaşehir Paşa UHF + CB Rölesi");
 </script>
 
 </body>
