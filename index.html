@@ -28,7 +28,7 @@ footer{text-align:center;padding:10px;background:#0b4f8a;color:#fff}
 <script>
 async function fetchWeather(city="Manisa") {
   try {
-    const apiKey = "YOUR_OPENWEATHERMAP_API_KEY"; // Buraya kendi API key’in
+    const apiKey = "5d6b25435d433a575d97274fc936276f"; // Senin API key’in
     const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=tr&appid=${apiKey}`);
     const data = await res.json();
     document.getElementById("temp").innerText = data.main.temp + "°C";
@@ -54,12 +54,9 @@ window.onload = function(){
     {name:"Spil Dağı VHF", lat:38.623, lng:27.433, status:"active"},
     {name:"Spil Dağı UHF", lat:38.623, lng:27.433, status:"active"},
     {name:"Soma Sivri Tepe UHF", lat:38.298, lng:27.319, status:"active"},
-    {name:"Yunt Dağı UHF", lat:38.485, lng:27.265, status:"active"},
-    {name:"Yunt Dağı VHF", lat:38.485, lng:27.265, status:"active"},
     {name:"Salihli Durasıllı UHF", lat:38.464, lng:27.449, status:"active"},
-    {name:"Üşümüş Tepe UHF", lat:38.600, lng:27.500, status:"active"},
     {name:"Alaşehir Paşa UHF", lat:38.446, lng:27.849, status:"active"},
-    {name:"Alaşehir CB Bant", lat:38.446, lng:27.849, status:"active"},
+    {name:"Alaşehir CB Bant (27.035–27.275 MHz)", lat:38.446, lng:27.849, status:"active"},
     {name:"Kula Merkez UHF", lat:38.703, lng:28.362, status:"active"},
     {name:"Turgutlu Merkez UHF", lat:38.512, lng:27.203, status:"active"},
     {name:"Akhisar Merkez UHF", lat:38.918, lng:27.839, status:"active"},
@@ -123,10 +120,7 @@ window.onload = function(){
 <tr><td>Spil Dağı</td><td>VHF</td><td>145.600</td><td>145.000</td><td>77.0</td></tr>
 <tr><td>Spil Dağı</td><td>UHF</td><td>439.225</td><td>431.625</td><td>88.5</td></tr>
 <tr><td>Soma Sivri Tepe</td><td>UHF</td><td>439.4125</td><td>431.8125</td><td>67.0</td></tr>
-<tr><td>Yunt Dağı</td><td>UHF</td><td>439.175</td><td>431.775</td><td>—</td></tr>
-<tr><td>Yunt Dağı</td><td>VHF</td><td>145.775</td><td>145.175</td><td>—</td></tr>
 <tr><td>Salihli Durasıllı</td><td>UHF</td><td>439.425</td><td>431.825</td><td>88.5</td></tr>
-<tr><td>Üşümüş Tepe</td><td>UHF</td><td>439.175</td><td>431.575</td><td>—</td></tr>
 <tr><td>Alaşehir Paşa (Merkez)</td><td>UHF</td><td>439.250</td><td>431.650</td><td>88.5</td></tr>
 <tr><td>Alaşehir CB Bant</td><td>CB</td><td>27.035 – 27.275</td><td>—</td><td>—</td></tr>
 <tr><td>Kula Merkez</td><td>UHF</td><td>439.350</td><td>431.750</td><td>88.5</td></tr>
