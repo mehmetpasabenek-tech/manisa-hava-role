@@ -7,59 +7,53 @@
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#eef2f6;
+  font-family:Arial, sans-serif;
+  margin:0;
+  background:#eef2f6;
 }
 header{
-    background:#0b4f8a;
-    color:#fff;
-    padding:15px;
-    text-align:center;
+  background:#0b4f8a;
+  color:#fff;
+  padding:15px;
+  text-align:center;
 }
 section{
-    background:#fff;
-    margin:15px;
-    padding:15px;
-    border-radius:8px;
+  background:#fff;
+  margin:15px;
+  padding:15px;
+  border-radius:8px;
 }
-h2{
-    color:#0b4f8a;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:10px;
-}
-th,td{
-    border:1px solid #ccc;
-    padding:8px;
-    text-align:center;
-}
-th{
-    background:#f2f2f2;
-}
+h2{color:#0b4f8a}
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:10px;
 }
 .card{
-    border:1px solid #ddd;
-    border-radius:6px;
-    padding:10px;
-    background:#fafafa;
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:10px;
+  background:#fafafa;
 }
-footer{
-    text-align:center;
-    padding:10px;
-    background:#0b4f8a;
-    color:#fff;
-    font-size:14px;
+table{
+  width:100%;
+  border-collapse:collapse;
 }
+th,td{
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:center;
+}
+th{background:#f2f2f2}
 .status-active{color:green;font-weight:bold;}
 .status-mid{color:#c77700;font-weight:bold;}
 .status-weak{color:red;font-weight:bold;}
+footer{
+  text-align:center;
+  padding:10px;
+  background:#0b4f8a;
+  color:#fff;
+}
 </style>
 </head>
 
@@ -67,38 +61,22 @@ footer{
 
 <header>
 <h1>Manisa Hava Durumu & Aktif Telsiz Röleleri</h1>
-<p>Güncel Röle Bilgi Sistemi</p>
+<p>Canlı İlçe Bazlı Bilgi Sistemi</p>
 </header>
 
 <section>
-<h2>🌤 Manisa Merkez Hava Durumu</h2>
-<p>Hava: Açık / Parçalı Bulutlu</p>
-<p>Sıcaklık: 12–15 °C</p>
-<p>Rüzgar: Kuzey – Kuzeydoğu</p>
-<p>Güneş: 08:20 / 17:50</p>
-</section>
-
-<section>
-<h2>📍 İlçeler</h2>
-<div class="grid">
-<div class="card">Alaşehir – Güneşli</div>
-<div class="card">Akhisar – Parçalı Bulutlu</div>
-<div class="card">Soma – Açık</div>
-<div class="card">Kula – Az Bulutlu</div>
-<div class="card">Salihli – Güneşli</div>
-<div class="card">Gördes – Parçalı</div>
-</div>
+<h2>🌦 Manisa İlçeleri – Canlı Hava Durumu</h2>
+<div id="ilceler" class="grid"></div>
 </section>
 
 <section>
 <h2>📡 Aktif Telsiz Röleleri</h2>
-
 <table>
 <tr>
 <th>Yer / Röle</th>
 <th>Bant</th>
-<th>RX (Çıkış)</th>
-<th>TX (Giriş)</th>
+<th>RX</th>
+<th>TX</th>
 <th>CTCSS</th>
 <th>Durum</th>
 </tr>
@@ -131,7 +109,7 @@ footer{
 </tr>
 
 <tr>
-<td>Alaşehir Paşa Rölesi (Yeni Mahalle)</td>
+<td>Alaşehir Paşa (Yeni Mahalle)</td>
 <td>UHF</td>
 <td>439.250</td>
 <td>431.650</td>
@@ -145,11 +123,11 @@ footer{
 <td>439.300</td>
 <td>431.700</td>
 <td>88.5</td>
-<td class="status-mid">Zaman Zaman Aktif</td>
+<td class="status-mid">Zaman Zaman</td>
 </tr>
 
 <tr>
-<td>Akhisar – Merkez</td>
+<td>Akhisar</td>
 <td>UHF</td>
 <td>439.375</td>
 <td>431.775</td>
@@ -158,21 +136,49 @@ footer{
 </tr>
 
 <tr>
-<td>Kula – Yüksek Tepe</td>
+<td>Kula</td>
 <td>UHF</td>
 <td>439.400</td>
 <td>431.800</td>
 <td>88.5</td>
-<td class="status-weak">Zayıf / Deneysel</td>
+<td class="status-weak">Zayıf</td>
 </tr>
-
 </table>
 </section>
 
 <footer>
-© 2025 Manisa Hava & Röle Bilgi Sistemi<br>
-Son Güncelleme: 2025
+© 2025 Manisa Hava & Röle Bilgi Sistemi
 </footer>
+
+<script>
+const apiKey = "5d6b25435d433a575d97274fc936276f";
+const ilceler = [
+  "Ahmetli","Akhisar","Alaşehir","Demirci","Gölmarmara","Gördes",
+  "Kırkağaç","Köprübaşı","Kula","Salihli","Sarıgöl","Saruhanlı",
+  "Selendi","Soma","Şehzadeler","Turgutlu","Yunusemre"
+];
+
+const container = document.getElementById("ilceler");
+
+ilceler.forEach(ilce => {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ilce},TR&units=metric&lang=tr&appid=${apiKey}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.weather) return;
+
+      const kart = document.createElement("div");
+      kart.className = "card";
+      kart.innerHTML = `
+        <b>${ilce}</b><br>
+        ${data.weather[0].description}<br>
+        🌡 ${data.main.temp} °C<br>
+        💨 ${data.wind.speed} m/sn
+      `;
+      container.appendChild(kart);
+    })
+    .catch(()=>{});
+});
+</script>
 
 </body>
 </html>
